@@ -1,3 +1,7 @@
+# global_level must be higher than the Meziantou.DotNet.CodingStandard files
+is_global = true
+global_level = 0
+
 #### Naming styles ####
 
 # Symbol specifications
