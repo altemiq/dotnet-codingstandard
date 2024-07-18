@@ -1,0 +1,33 @@
+<Project>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)\..\configuration\stylecop.json" Visible="false" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Supress warning NU5131 (https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5131) which is reported because .nuspec file is not updated -->
+    <!-- to contain <references> element (https://learn.microsoft.com/en-us/nuget/reference/nuspec#explicit-assembly-references) for all files inside the 'ref\' directory.  -->
+    <NoWarn>$(NoWarn),NU5131</NoWarn>
+
+    <!-- See https://learn.microsoft.com/en-us/nuget/reference/msbuild-targets#targetsfortfmspecificcontentinpackage -->
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddRefAssemblyToPackage</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <Target Name="AddRefAssemblyToPackage">
+    <ItemGroup Condition=" Exists('$(TargetRefPath)') ">
+      <TfmSpecificPackageFile Include="$(TargetRefPath)" PackagePath="ref/$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(DocumentationFile)" PackagePath="ref/$(TargetFramework)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_GeneratePackageProjectUrl" AfterTargets="_InitializeNuspecRepositoryInformationProperties">
+    <PropertyGroup>
+      <_RepositoryUrl Condition=" '$(RepositoryUrl)' != '' ">$(RepositoryUrl)</_RepositoryUrl>
+      <_RepositoryUrl Condition=" '$(RepositoryUrl)' == '' ">$(PrivateRepositoryUrl)</_RepositoryUrl>
+      <_PackageProjectUrl Condition=" '$(_RepositoryUrl)' != '' and $(_RepositoryUrl.StartsWith('http'))">$(_RepositoryUrl)</_PackageProjectUrl>
+      <_PackageProjectUrl Condition=" '$(_PackageProjectUrl)' != '' and $(_PackageProjectUrl.EndsWith('.git'))">$(_PackageProjectUrl.Substring(0,$(_PackageProjectUrl.LastIndexOf('.'))))</_PackageProjectUrl>
+      <PackageProjectUrl Condition=" '$(PackageProjectUrl)' == '' and '$(_PackageProjectUrl)' != ''">$(_PackageProjectUrl)</PackageProjectUrl>
+    </PropertyGroup>
+  </Target>
+  
+</Project>

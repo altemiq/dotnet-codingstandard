@@ -1,0 +1,12 @@
+# global_level must be higher than the NET Analyzer files
+is_global = true
+global_level = 1
+
+# RCS1018: Add/remove accessibility modifiers
+roslynator_accessibility_modifiers = explicit
+
+# RCS1096: Use 'HasFlag' method or bitwise operator
+roslynator_enum_has_flag_style = operator
+
+# RCS1250: Use implicit/explicit object creation
+roslynator_object_creation_type_style = implicit_when_type_is_obvious

@@ -1,0 +1,26 @@
+<Project>
+
+  <PropertyGroup>
+    <Company>Altemiq</Company>
+    <RootNamespace>$(Company).$(MSBuildProjectName)</RootNamespace>
+    <AssemblyName>$(Company).$(MSBuildProjectName)</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Build" Condition=" '$(AccelerateBuildsInVisualStudio)' == 'true' ">
+    <!--
+      If you target a framework earlier than .NET 5 (including .NET Framework and .NET Standard), you should set `ProduceReferenceAssembly` to true in order to speed incremental builds.
+      If you multi-target and any target is before .NET 5, you need this. Even if you target .NET 5 or later, having this property is fine.
+    -->
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <!-- Add all editorconfig files -->
+    <EditorConfigFiles Include="$(MSBuildThisFileDirectory)\..\configuration\*.editorconfig" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageVersion Include="Meziantou.Analyzer" Version="2.0.161" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,1 @@
+# Altemiq.DotNet.CodingStandard

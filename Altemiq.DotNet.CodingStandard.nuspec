@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Altemiq.DotNet.CodingStandard</id>
+    <version>$version$</version>
+    <authors>altemiq,rsking</authors>
+    <developmentDependency>true</developmentDependency>
+    <readme>README.md</readme>
+    <icon>icon.png</icon>
+    <projectUrl>https://github.com/altemiq/dotnet-codingstandard</projectUrl>
+    <description>A package to configure .NET coding style and static analysis</description>
+    
+    <repository type="git" url="$RepositoryUrl$" commit="$RepositoryCommit$" branch="$RepositoryBranch$" />
+    <dependencies>
+      <dependency id="Meziantou.DotNet.CodingStandard" version="1.0.125" />
+
+      <dependency id="Roslynator.Analyzers" version="4.12.4" />
+      <dependency id="SonarAnalyzer.CSharp" version="9.29.0.95321" />
+      <dependency id="StyleCop.Analyzers.Unstable" version="1.2.0.556" />
+
+      <dependency id="DotNet.ReproducibleBuilds" version="1.2.4" />
+      <dependency id="DotNet.ReproducibleBuilds.Isolated" version="1.2.4" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\**" target="" />
+    <file src="icon.png" target="" />
+    <file src="README.md" target="" />
+  </files>
+</package>

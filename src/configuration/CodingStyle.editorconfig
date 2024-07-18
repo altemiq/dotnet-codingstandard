@@ -1,0 +1,60 @@
+is_global = true
+global_level = 0
+
+#### .NET Coding Conventions ####
+
+# Organize usings
+dotnet_separate_import_directive_groups = false
+file_header_template = -----------------------------------------------------------------------\n<copyright file="{fileName}" company="Altemiq">\nCopyright (c) Altemiq. All rights reserved.\n</copyright>\n-----------------------------------------------------------------------
+
+# this. and Me. preferences
+dotnet_style_qualification_for_event = true:warning
+dotnet_style_qualification_for_field = true:warning
+dotnet_style_qualification_for_method = true:warning
+dotnet_style_qualification_for_property = true:warning
+
+# Parentheses preferences
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
+
+# Modifier preferences
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
+
+# Expression-level preferences
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+dotnet_style_prefer_compound_assignment = true:suggestion
+dotnet_style_prefer_inferred_tuple_names = true:suggestion
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+dotnet_style_prefer_simplified_interpolation = true:suggestion
+
+# Suppression preferences
+dotnet_remove_unnecessary_suppression_exclusions = none
+
+#### C# Coding Conventions ####
+
+# Expression-bodied members
+csharp_style_expression_bodied_local_functions = false
+
+# Pattern matching preferences
+csharp_style_prefer_not_pattern = true:suggestion
+csharp_style_prefer_pattern_matching = true:silent
+
+# Code-block preferences
+csharp_prefer_braces = true:silent
+csharp_prefer_simple_using_statement = true:suggestion
+
+# Expression-level preferences
+csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+
+# 'using' directive preferences
+csharp_using_directive_placement = inside_namespace:silent
+
+# namespace declaration
+csharp_style_namespace_declarations = file_scoped:warning
+
+#### C# Formatting Rules ####
+
+# Indentation preferences
+csharp_indent_case_contents_when_block = true

@@ -1,0 +1,6 @@
+#### Naming styles ####
+
+# Symbol specifications
+
+dotnet_naming_style.static_prefix_style.required_prefix = 
+dotnet_naming_style.camel_case_underscore_style.required_prefix = 
