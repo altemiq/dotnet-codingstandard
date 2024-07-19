@@ -11,13 +11,13 @@ public sealed class PackageFixture : IAsyncLifetime
     public async Task InitializeAsync()
     {
         // Build NuGet package
-        var nugetPath = FullPath.GetTempPath() / $"nuget-{Guid.NewGuid()}.exe";
+        FullPath nugetPath = FullPath.GetTempPath() / $"nuget-{Guid.NewGuid()}.exe";
         await DownloadFileAsync("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe", nugetPath);
-        var nuspecPath = PathHelpers.GetRootDirectory() / "Altemiq.DotNet.CodingStandard.nuspec";
+        FullPath nuspecPath = PathHelpers.GetRootDirectory() / "Altemiq.DotNet.CodingStandard.nuspec";
 
-        var psi = new System.Diagnostics.ProcessStartInfo(nugetPath);
+        System.Diagnostics.ProcessStartInfo psi = new(nugetPath);
         psi.ArgumentList.AddRange(["pack", nuspecPath, "-ForceEnglishOutput", "-Version", "999.9.9", "-OutputDirectory", _packageDirectory.FullPath]);
-        await psi.RunAsTaskAsync();
+        _ = await psi.RunAsTaskAsync();
     }
 
     public async Task DisposeAsync()
@@ -28,8 +28,8 @@ public sealed class PackageFixture : IAsyncLifetime
     private static async Task DownloadFileAsync(string url, FullPath path)
     {
         path.CreateParentDirectory();
-        await using var nugetStream = await SharedHttpClient.Instance.GetStreamAsync(url);
-        await using var fileStream = File.Create(path);
+        await using Stream nugetStream = await SharedHttpClient.Instance.GetStreamAsync(url);
+        await using FileStream fileStream = File.Create(path);
         await nugetStream.CopyToAsync(fileStream);
     }
 }

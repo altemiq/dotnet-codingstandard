@@ -1,10 +1,10 @@
 namespace Altemiq.DotNet.CodingStandard.Tests;
 
+using Meziantou.Framework;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml.Linq;
-using Meziantou.Framework;
 using Xunit.Abstractions;
 
 public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHelper) : IClassFixture<PackageFixture>
@@ -12,10 +12,10 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
     [Fact]
     public async Task NoXmlDocumentationReported()
     {
-        var project = new ProjectBuilder(fixture, testOutputHelper);
-        project.AddCsprojFile();
-        project.AddFile("sample.cs", """_ = System.DateTime.Now;""");
-        var data = await project.BuildAndGetOutput();
+        ProjectBuilder project = new(fixture, testOutputHelper);
+        _ = project.AddCsprojFile();
+        _ = project.AddFile("sample.cs", """_ = System.DateTime.Now;""");
+        BuildResult data = await project.BuildAndGetOutput();
         Assert.True(data.HasWarning("SA0001"));
     }
 
@@ -31,8 +31,8 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
             _testOutputHelper = testOutputHelper;
 
             _directory = TemporaryDirectory.Create();
-            _directory.CreateTextFile(
-                "NuGet.config", 
+            _ = _directory.CreateTextFile(
+                "NuGet.config",
                 $"""
                 <configuration>
                   <config>
@@ -65,25 +65,25 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
 
         public ProjectBuilder AddCsprojFile((string Name, string Value)[]? properties = null, (string Name, string Version)[]? nuGetPackages = null, XElement[]? additionalProjectElements = null)
         {
-            var propertiesElement = new XElement("PropertyGroup");
+            XElement propertiesElement = new("PropertyGroup");
             if (properties is not null)
             {
-                foreach (var (name, value) in properties)
+                foreach ((string name, string value) in properties)
                 {
                     propertiesElement.Add(new XElement(name), value);
                 }
             }
 
-            var packagesElement = new XElement("ItemGroup");
+            XElement packagesElement = new("ItemGroup");
             if (nuGetPackages is not null)
             {
-                foreach (var package in nuGetPackages)
+                foreach ((string Name, string Version) package in nuGetPackages)
                 {
                     packagesElement.Add(new XElement("PackageReference", new XAttribute("Include", package.Name), new XAttribute("Version", package.Version)));
                 }
             }
 
-            var content = $"""
+            string content = $"""
                 <Project Sdk="Microsoft.NET.Sdk">
                   <PropertyGroup>
                     <OutputType>exe</OutputType>
@@ -107,7 +107,7 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
 
         public async Task<BuildResult> BuildAndGetOutput(params string[]? buildArguments)
         {
-            var psi = new ProcessStartInfo("dotnet")
+            ProcessStartInfo psi = new("dotnet")
             {
                 WorkingDirectory = _directory.FullPath,
                 RedirectStandardInput = true,
@@ -118,37 +118,67 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
 
             if (buildArguments is not null)
             {
-                foreach (var arg in buildArguments)
+                foreach (string arg in buildArguments)
                 {
                     psi.ArgumentList.Add(arg);
                 }
             }
 
             // Remove parent environment variables
-            psi.Environment.Remove("CI");
-            psi.Environment.Remove("GITHUB_ACTIONS");
+            _ = psi.Environment.Remove("CI");
+            _ = psi.Environment.Remove("GITHUB_ACTIONS");
 
-            var result = await psi.RunAsTaskAsync();
+            ProcessResult result = await psi.RunAsTaskAsync();
             _testOutputHelper.WriteLine("Process exit code: " + result.ExitCode);
             _testOutputHelper.WriteLine(result.Output.ToString());
 
-            var sarif = JsonSerializer.Deserialize<SarifFile>(File.ReadAllBytes(_directory.FullPath / SarifFileName));
+            SarifFile? sarif = JsonSerializer.Deserialize<SarifFile>(File.ReadAllBytes(_directory.FullPath / SarifFileName));
             _testOutputHelper.WriteLine("Sarif result:\n" + string.Join("\n", sarif!.AllResults().Select(r => r.ToString())));
             return new BuildResult(result.ExitCode, result.Output, sarif);
         }
 
-        public ValueTask DisposeAsync() => _directory.DisposeAsync();
+        public ValueTask DisposeAsync()
+        {
+            return _directory.DisposeAsync();
+        }
     }
 
     private sealed record BuildResult(int ExitCode, ProcessOutputCollection ProcessOutput, SarifFile SarifFile)
     {
-        public bool OutputContains(string value, StringComparison stringComparison = StringComparison.Ordinal) => ProcessOutput.Any(line => line.Text.Contains(value, stringComparison));
-        public bool OutputDoesNotContain(string value, StringComparison stringComparison = StringComparison.Ordinal) => !ProcessOutput.Any(line => line.Text.Contains(value, stringComparison));
-        public bool HasError() => SarifFile.AllResults().Any(r => r.Level == "error");
-        public bool HasError(string ruleId) => SarifFile.AllResults().Any(r => r.Level == "error" && r.RuleId == ruleId);
-        public bool HasWarning() => SarifFile.AllResults().Any(r => r.Level == "warning");
-        public bool HasWarning(string ruleId) => SarifFile.AllResults().Any(r => r.Level == "warning" && r.RuleId == ruleId);
-        public bool HasNote(string ruleId) => SarifFile.AllResults().Any(r => r.Level == "note" && r.RuleId == ruleId);
+        public bool OutputContains(string value, StringComparison stringComparison = StringComparison.Ordinal)
+        {
+            return ProcessOutput.Any(line => line.Text.Contains(value, stringComparison));
+        }
+
+        public bool OutputDoesNotContain(string value, StringComparison stringComparison = StringComparison.Ordinal)
+        {
+            return !ProcessOutput.Any(line => line.Text.Contains(value, stringComparison));
+        }
+
+        public bool HasError()
+        {
+            return SarifFile.AllResults().Any(r => r.Level == "error");
+        }
+
+        public bool HasError(string ruleId)
+        {
+            return SarifFile.AllResults().Any(r => r.Level == "error" && r.RuleId == ruleId);
+        }
+
+        public bool HasWarning()
+        {
+            return SarifFile.AllResults().Any(r => r.Level == "warning");
+        }
+
+        public bool HasWarning(string ruleId)
+        {
+            return SarifFile.AllResults().Any(r => r.Level == "warning" && r.RuleId == ruleId);
+        }
+
+        public bool HasNote(string ruleId)
+        {
+            return SarifFile.AllResults().Any(r => r.Level == "note" && r.RuleId == ruleId);
+        }
     }
 
     private sealed class SarifFile
@@ -156,7 +186,10 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
         [JsonPropertyName("runs")]
         public required SarifFileRun[] Runs { get; set; }
 
-        public IEnumerable<SarifFileRunResult> AllResults() => Runs.SelectMany(r => r.Results);
+        public IEnumerable<SarifFileRunResult> AllResults()
+        {
+            return Runs.SelectMany(r => r.Results);
+        }
     }
 
     private sealed class SarifFileRun
@@ -176,7 +209,10 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
         [JsonPropertyName("message")]
         public required SarifFileRunResultMessage Message { get; set; }
 
-        public override string ToString() => $"{Level}:{RuleId} {Message}";
+        public override string ToString()
+        {
+            return $"{Level}:{RuleId} {Message}";
+        }
     }
 
     private sealed class SarifFileRunResultMessage
@@ -184,6 +220,9 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
         [JsonPropertyName("text")]
         public required string Text { get; set; }
 
-        public override string ToString() => Text;
+        public override string ToString()
+        {
+            return Text;
+        }
     }
 }

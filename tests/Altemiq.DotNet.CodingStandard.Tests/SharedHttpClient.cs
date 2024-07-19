@@ -6,7 +6,7 @@ internal static class SharedHttpClient
 
     private static HttpClient CreateHttpClient()
     {
-        var socketHandler = new SocketsHttpHandler()
+        SocketsHttpHandler socketHandler = new()
         {
             PooledConnectionIdleTimeout = TimeSpan.FromMinutes(1),
             PooledConnectionLifetime = TimeSpan.FromMinutes(1),
@@ -19,8 +19,8 @@ internal static class SharedHttpClient
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             const int MaxRetries = 5;
-            var defaultDelay = TimeSpan.FromMilliseconds(200);
-            for (var i = 1; ; i++, defaultDelay *= 2)
+            TimeSpan defaultDelay = TimeSpan.FromMilliseconds(200);
+            for (int i = 1; ; i++, defaultDelay *= 2)
             {
                 TimeSpan? delayHint = null;
                 HttpResponseMessage? result = null;
@@ -33,7 +33,6 @@ internal static class SharedHttpClient
                         // Use "Retry-After" value, if available. Typically, this is sent with
                         // either a 503 (Service Unavailable) or 429 (Too Many Requests):
                         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
-
                         delayHint = result.Headers.RetryAfter switch
                         {
                             { Date: { } date } => date - DateTimeOffset.UtcNow,
@@ -52,18 +51,25 @@ internal static class SharedHttpClient
                 {
                     result?.Dispose();
                     if (IsLastAttempt(i))
+                    {
                         throw;
+                    }
                 }
                 catch (TaskCanceledException ex) when (ex.CancellationToken != cancellationToken) // catch "The request was canceled due to the configured HttpClient.Timeout of 100 seconds elapsing"
                 {
                     result?.Dispose();
                     if (IsLastAttempt(i))
+                    {
                         throw;
+                    }
                 }
 
                 await Task.Delay(delayHint is { } someDelay && someDelay > TimeSpan.Zero ? someDelay : defaultDelay, cancellationToken).ConfigureAwait(false);
 
-                static bool IsLastAttempt(int i) => i >= MaxRetries;
+                static bool IsLastAttempt(int i)
+                {
+                    return i >= MaxRetries;
+                }
             }
         }
     }

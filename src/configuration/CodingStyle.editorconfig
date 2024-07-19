@@ -2,6 +2,11 @@
 is_global = true
 global_level = 0
 
+#### Core EditorConfig Options ####
+
+# New line preferences
+insert_final_newline = false
+
 #### .NET Coding Conventions ####
 
 # Organize usings
