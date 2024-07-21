@@ -4,6 +4,9 @@ global_level = 0
 
 #### Core EditorConfig Options ####
 
+# do not set indent (that has too many unintended consequences)
+indent_size = unset
+
 # do not set charset (Use of utf-8-bom is discouraged)
 charset = unset
 
