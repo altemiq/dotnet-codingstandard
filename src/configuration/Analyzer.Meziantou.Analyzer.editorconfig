@@ -10,3 +10,14 @@ dotnet_diagnostic.MA0048.severity = none
 
 # MA0049: Type name should not match namespace
 dotnet_diagnostic.MA0049.severity = none
+
+## Deprecated rules
+
+# MA0018: Do not declare static members on generic types (deprecated; use CA1000 instead)
+dotnet_diagnostic.MA0018.severity = none
+
+# MA0038: Make method static (deprecated, use CA1822 instead)
+dotnet_diagnostic.MA0038.severity = none
+
+# MA0041: Make property static (deprecated, use CA1822 instead)
+dotnet_diagnostic.MA0041.severity = none
