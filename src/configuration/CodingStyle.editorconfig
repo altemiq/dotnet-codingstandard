@@ -4,6 +4,9 @@ global_level = 0
 
 #### Core EditorConfig Options ####
 
+# do not set charset (Use of utf-8-bom is discouraged)
+charset = unset
+
 # New line preferences
 insert_final_newline = false
 
