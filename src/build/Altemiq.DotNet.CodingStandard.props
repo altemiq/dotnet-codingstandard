@@ -6,13 +6,13 @@
     <ContinuousIntegrationOrRelease Condition=" $(ContinuousIntegrationBuild) == 'true' OR '$(Configuration)' == 'Release' ">true</ContinuousIntegrationOrRelease>
 
     <!-- Set the company -->
-    <Company>Altemiq</Company>
+    <Company Condition=" '$(Company)' == '' ">Altemiq</Company>
 
     <!-- By default, set the root namespace to have the company at the start -->
-    <RootNamespace>$(Company).$(MSBuildProjectName)</RootNamespace>
+    <RootNamespace Condition=" '$(RootNamespace)' == '' ">$(Company).$(MSBuildProjectName)</RootNamespace>
 
     <!-- By default, set the assembly name to have the company at the start -->
-    <AssemblyName>$(Company).$(MSBuildProjectName)</AssemblyName>
+    <AssemblyName Condition=" '$(AssemblyName)' == '' ">$(Company).$(MSBuildProjectName)</AssemblyName>
 
     <!-- Use static graph evaluation for restore -->
     <RestoreUseStaticGraphEvaluation Condition=" '$(RestoreUseStaticGraphEvaluation)' == '' ">true</RestoreUseStaticGraphEvaluation>
