@@ -1,23 +1,29 @@
-# global_level must be higher than the Meziantou.DotNet.CodingStandard files
+# global_level must be higher than the NET Analyzer files
 is_global = true
-global_level = 1
+global_level = 0
 
 # MA0026: Fix TODO comment
+# Help link: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0026.md
 dotnet_diagnostic.MA0026.severity = none
 
 # MA0048: File name must match type name
+# Help link: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0048.md
 dotnet_diagnostic.MA0048.severity = none
 
 # MA0049: Type name should not match namespace
+# Help link: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0049.md
 dotnet_diagnostic.MA0049.severity = none
 
 ## Deprecated rules
 
 # MA0018: Do not declare static members on generic types (deprecated; use CA1000 instead)
+# Help link: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0018.md
 dotnet_diagnostic.MA0018.severity = none
 
 # MA0038: Make method static (deprecated, use CA1822 instead)
+# Help link: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0038.md
 dotnet_diagnostic.MA0038.severity = none
 
 # MA0041: Make property static (deprecated, use CA1822 instead)
+# Help link: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0041.md
 dotnet_diagnostic.MA0041.severity = none

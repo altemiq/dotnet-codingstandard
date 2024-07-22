@@ -1,6 +1,17 @@
 <Project>
 
+  <!--
+    Banned Symbols
+  -->
+  <PropertyGroup>
+    <IncludeDefaultBannedSymbols Condition=" $(IncludeDefaultBannedSymbols) == '' ">true</IncludeDefaultBannedSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
+    <!-- Add BannedSymbols.txt -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)\..\configuration\BannedSymbols.txt" Condition=" '$(IncludeDefaultBannedSymbols)' == 'true' " Visible="false" />
+
+    <!-- Add stylecop.json -->
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\..\configuration\stylecop.json" Visible="false" />
   </ItemGroup>
 
@@ -13,6 +24,9 @@
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddRefAssemblyToPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
+  <!--
+    Add the reference assemblies to the package
+  -->
   <Target Name="AddRefAssemblyToPackage">
     <ItemGroup Condition=" Exists('$(TargetRefPath)') ">
       <TfmSpecificPackageFile Include="$(TargetRefPath)" PackagePath="ref/$(TargetFramework)" />
@@ -20,6 +34,17 @@
     </ItemGroup>
   </Target>
 
+  <!-- Disable packages -->
+  <Target Name="Disable_SponsorLink" BeforeTargets="CoreCompile" Condition=" $(Disable_SponsorLink) != 'false' ">
+    <ItemGroup>
+      <Analyzer Remove="@(Analyzer)" Condition="'%(FileName)' == 'DevLooped.SponsorLink' " />
+      <Analyzer Remove="@(Analyzer)" Condition="'%(FileName)' == 'Moq.CodeAnalysis' " />
+    </ItemGroup>
+  </Target>
+
+  <!--
+    Generate the package project URL
+  -->
   <Target Name="_GeneratePackageProjectUrl" AfterTargets="_InitializeNuspecRepositoryInformationProperties">
     <PropertyGroup>
       <_RepositoryUrl Condition=" '$(RepositoryUrl)' != '' ">$(RepositoryUrl)</_RepositoryUrl>

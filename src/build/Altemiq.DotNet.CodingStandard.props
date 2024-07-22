@@ -1,12 +1,57 @@
 <Project>
 
   <PropertyGroup>
+    <!-- Set the CI or Release property -->
+    <ContinuousIntegrationOrRelease>false</ContinuousIntegrationOrRelease>
+    <ContinuousIntegrationOrRelease Condition=" $(ContinuousIntegrationBuild) == 'true' OR '$(Configuration)' == 'Release' ">true</ContinuousIntegrationOrRelease>
+
+    <!-- Set the company -->
     <Company>Altemiq</Company>
+
+    <!-- By default, set the root namespace to have the company at the start -->
     <RootNamespace>$(Company).$(MSBuildProjectName)</RootNamespace>
+
+    <!-- By default, set the assembly name to have the company at the start -->
     <AssemblyName>$(Company).$(MSBuildProjectName)</AssemblyName>
+
+    <!-- Use static graph evaluation for restore -->
+    <RestoreUseStaticGraphEvaluation Condition=" '$(RestoreUseStaticGraphEvaluation)' == '' ">true</RestoreUseStaticGraphEvaluation>
+
+    <!-- Turn on the report analyzer -->
+    <ReportAnalyzer Condition=" '$(ReportAnalyzer)' == '' ">true</ReportAnalyzer>
+
+    <!-- Set the features to strict -->
+    <Features Condition=" '$(Features)' == '' ">strict</Features>
+
+    <!-- Turn on deterministic builds -->
+    <Deterministic Condition=" '$(Deterministic)' == '' ">true</Deterministic>
+
+    <!-- Enable .NET Analyzers by default -->
+    <EnableNETAnalyzers Condition=" '$(EnableNETAnalyzers)' == '' ">true</EnableNETAnalyzers>
+
+    <!-- Set the .NET Analysis level -->
+    <AnalysisMode Condition=" '$(AnalysisMode)' == '' ">Recommended</AnalysisMode>
+    <AnalysisLevel Condition=" '$(AnalysisLevel)' == '' ">latest</AnalysisLevel>
+
+    <!-- Turn of CLS compliant check-->
+    <NoWarn>$(NoWarn);CA1014</NoWarn>
+    <AllowUnsafeBlocks Condition=" '$(AllowUnsafeBlocks)' == '' ">true</AllowUnsafeBlocks>
+
+    <!-- Use latest lang version for latest features -->
+    <LangVersion Condition=" '$(LangVersion)' == '' ">latest</LangVersion>
+
+    <!-- Treat errors as warnings in CI or Release configuration -->
+    <MSBuildTreatWarningsAsErrors Condition=" '$(MSBuildTreatWarningsAsErrors)' == '' AND '$(ContinuousIntegrationOrRelease)' == 'true' ">true</MSBuildTreatWarningsAsErrors>
+    <TreatWarningsAsErrors Condition="'$(TreatWarningsAsErrors)' == '' AND '$(ContinuousIntegrationOrRelease)' == 'true' ">true</TreatWarningsAsErrors>
+    
+    <!-- Enforce code style in builder in CI or Release configuration -->
+    <EnforceCodeStyleInBuild Condition="'$(EnforceCodeStyleInBuild)' == '' AND '$(ContinuousIntegrationOrRelease)' == 'true' ">true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
-  <PropertyGroup Label="Build" Condition=" '$(AccelerateBuildsInVisualStudio)' == 'true' ">
+  <PropertyGroup Label="Build">
+    <!-- Enable Build Acceleration in Visual Studio. -->
+    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+
     <!--
       If you target a framework earlier than .NET 5 (including .NET Framework and .NET Standard), you should set `ProduceReferenceAssembly` to true in order to speed incremental builds.
       If you multi-target and any target is before .NET 5, you need this. Even if you target .NET 5 or later, having this property is fine.
@@ -17,10 +62,6 @@
   <ItemGroup>
     <!-- Add all editorconfig files -->
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)\..\configuration\*.editorconfig" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageVersion Include="Meziantou.Analyzer" Version="2.0.161" />
   </ItemGroup>
 
 </Project>
