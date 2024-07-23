@@ -15,6 +15,9 @@
     <!-- By default, set the assembly name to have the company at the start -->
     <AssemblyName Condition=" '$(AssemblyName)' == '' ">$(Company).$(MSBuildProjectName)</AssemblyName>
 
+    <!-- Generate documentation -->
+    <GenerateDocumentationFile Condition=" '$(GenerateDocumentationFile)' == '' and '$(OutputType)' == 'Library' ">true</GenerateDocumentationFile>
+
     <!-- Use static graph evaluation for restore -->
     <RestoreUseStaticGraphEvaluation Condition=" '$(RestoreUseStaticGraphEvaluation)' == '' ">true</RestoreUseStaticGraphEvaluation>
 
