@@ -16,7 +16,7 @@
     <AssemblyName Condition=" '$(AssemblyName)' == '' ">$(Company).$(MSBuildProjectName)</AssemblyName>
 
     <!-- Generate documentation -->
-    <GenerateDocumentationFile Condition=" '$(GenerateDocumentationFile)' == '' and '$(OutputType)' == 'Library' ">true</GenerateDocumentationFile>
+    <GenerateDocumentationFile Condition=" '$(OutputType)' == 'Library' ">true</GenerateDocumentationFile>
 
     <!-- Use static graph evaluation for restore -->
     <RestoreUseStaticGraphEvaluation Condition=" '$(RestoreUseStaticGraphEvaluation)' == '' ">true</RestoreUseStaticGraphEvaluation>
