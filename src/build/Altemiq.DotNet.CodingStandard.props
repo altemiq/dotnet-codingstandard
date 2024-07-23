@@ -10,7 +10,7 @@
     <Company Condition=" '$(Company)' == '' ">$(DefaultCompany)</Company>
 
     <!-- By default, set the root namespace to have the company at the start -->
-    <RootNamespace Condition=" '$(RootNamespace)' == '' ">$(Company).$(MSBuildProjectName)</RootNamespace>
+    <RootNamespace Condition=" '$(RootNamespace)' == '' ">$(Company).$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 
     <!-- By default, set the assembly name to have the company at the start -->
     <AssemblyName Condition=" '$(AssemblyName)' == '' ">$(Company).$(MSBuildProjectName)</AssemblyName>
