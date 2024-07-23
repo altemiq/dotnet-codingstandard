@@ -6,7 +6,8 @@
     <ContinuousIntegrationOrRelease Condition=" $(ContinuousIntegrationBuild) == 'true' OR '$(Configuration)' == 'Release' ">true</ContinuousIntegrationOrRelease>
 
     <!-- Set the company -->
-    <Company Condition=" '$(Company)' == '' ">Altemiq</Company>
+    <DefaultCompany>Altemiq</DefaultCompany>
+    <Company Condition=" '$(Company)' == '' ">$(DefaultCompany)</Company>
 
     <!-- By default, set the root namespace to have the company at the start -->
     <RootNamespace Condition=" '$(RootNamespace)' == '' ">$(Company).$(MSBuildProjectName)</RootNamespace>
