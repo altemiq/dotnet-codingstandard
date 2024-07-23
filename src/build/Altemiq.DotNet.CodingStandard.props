@@ -62,7 +62,12 @@
     -->
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
-    
+
+  <PropertyGroup Label="Packaging">
+    <!-- set the default copyright -->
+    <Copyright Condition=" '$(Copyright)' == '' ">Copyright © $(Company) Pty Ltd $([System.DateTime]::Now.ToString("yyyy"))</Copyright>
+  </PropertyGroup>
+
   <ItemGroup>
     <!-- Add all editorconfig files -->
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)\..\configuration\*.editorconfig" />
