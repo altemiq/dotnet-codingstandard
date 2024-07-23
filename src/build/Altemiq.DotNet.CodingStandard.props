@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!-- Set the CI or Release property -->
     <ContinuousIntegrationOrRelease>false</ContinuousIntegrationOrRelease>
-    <ContinuousIntegrationOrRelease Condition=" $(ContinuousIntegrationBuild) == 'true' OR '$(Configuration)' == 'Release' ">true</ContinuousIntegrationOrRelease>
+    <ContinuousIntegrationOrRelease Condition=" '$(ContinuousIntegrationBuild)' == 'true' OR '$(Configuration)' == 'Release' ">true</ContinuousIntegrationOrRelease>
 
     <!-- Set the company -->
     <DefaultCompany>Altemiq</DefaultCompany>
@@ -46,10 +46,10 @@
 
     <!-- Treat errors as warnings in CI or Release configuration -->
     <MSBuildTreatWarningsAsErrors Condition=" '$(MSBuildTreatWarningsAsErrors)' == '' AND '$(ContinuousIntegrationOrRelease)' == 'true' ">true</MSBuildTreatWarningsAsErrors>
-    <TreatWarningsAsErrors Condition="'$(TreatWarningsAsErrors)' == '' AND '$(ContinuousIntegrationOrRelease)' == 'true' ">true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors Condition=" '$(TreatWarningsAsErrors)' == '' AND '$(ContinuousIntegrationOrRelease)' == 'true' ">true</TreatWarningsAsErrors>
     
     <!-- Enforce code style in builder in CI or Release configuration -->
-    <EnforceCodeStyleInBuild Condition="'$(EnforceCodeStyleInBuild)' == '' AND '$(ContinuousIntegrationOrRelease)' == 'true' ">true</EnforceCodeStyleInBuild>
+    <EnforceCodeStyleInBuild Condition=" '$(EnforceCodeStyleInBuild)' == '' AND '$(ContinuousIntegrationOrRelease)' == 'true' ">true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <PropertyGroup Label="Build">
