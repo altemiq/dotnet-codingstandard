@@ -1,6 +1,108 @@
 <Project>
 
   <!--
+    Strongly-Typed resources
+  -->
+  <PropertyGroup Condition=" '$(GenerateStronglyTypedResources)' == 'true' ">
+    <CreateManifestResourceNamesDependsOn>_CreateStronglyTypedManifestResourceNames;$(CreateManifestResourceNamesDependsOn)</CreateManifestResourceNamesDependsOn>
+    <CreateCustomManifestResourceNamesDependsOn>_FixManifestResourceNames;$(CreateCustomManifestResourceNamesDependsOn)</CreateCustomManifestResourceNamesDependsOn>
+    <CoreCompileDependsOn>PrepareResources;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+  </PropertyGroup>
+
+  <!--
+    Set the StronglyTyped* metadata on RESX embedded resources
+  -->
+  <Target Name="_CreateStronglyTypedManifestResourceNames"
+        Condition=" '@(EmbeddedResource)' != '' and '$(GenerateStronglyTypedResources)' == 'true' ">
+    <PropertyGroup>
+      <ResourceNamespace Condition=" '$(ResourceNamespace)' == '' ">$(RootNamespace)</ResourceNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <!-- update to do strongly typed resources -->
+      <EmbeddedResource Condition=" '%(EmbeddedResource.Type)' == 'Resx' and '%(EmbeddedResource.WithCulture)' == 'false' ">
+        <Generator>MSBuild:Compile</Generator>
+        <StronglyTypedFileName>$(IntermediateOutputPath)\$([MSBuild]::ValueOrDefault('%(RelativeDir)', '').Replace('\', '.').Replace('/', '.'))%(Filename).g$(DefaultLanguageSourceExtension)</StronglyTypedFileName>
+        <StronglyTypedLanguage>$(Language)</StronglyTypedLanguage>
+        <StronglyTypedNamespace Condition=" '%(RelativeDir)' == '' ">$(ResourceNamespace)</StronglyTypedNamespace>
+        <StronglyTypedNamespace Condition=" '%(RelativeDir)' != '' ">$(ResourceNamespace).$([MSBuild]::ValueOrDefault('%(RelativeDir)', '').Trim('\').Trim('/').Replace('.','_').Replace('\','.').Replace('/','.'))</StronglyTypedNamespace>
+        <StronglyTypedClassName>%(Filename)</StronglyTypedClassName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+
+  <!--
+    Fix the manifest resource names
+  -->
+  <Target Name="_FixManifestResourceNames" Condition=" '$(GenerateStronglyTypedResources)' == 'true' ">
+    <ItemGroup>
+      <EmbeddedResource Condition=" '%(EmbeddedResource.Type)' == 'Resx' ">
+        <ManifestResourceName Condition=" '%(RelativeDir)' == '' ">$(ResourceNamespace).%(EmbeddedResource.Filename)</ManifestResourceName>
+        <ManifestResourceName Condition=" '%(RelativeDir)' != '' ">$(ResourceNamespace).$([MSBuild]::ValueOrDefault('%(RelativeDir)', '').Trim('\').Trim('/').Replace('.','_').Replace('\','.').Replace('/','.')).%(EmbeddedResource.Filename)</ManifestResourceName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+
+  <!--
+    Update the strongly typed resouces
+  -->
+  <Target Name="_UpdateStronglyTypedResources"
+          AfterTargets="PrepareResources"
+          Condition=" '$(GenerateStronglyTypedResources)' == 'true' and ($([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETStandard' and $([MSBuild]::VersionLessThan($([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')), '2.0'))) ">
+    <_UpdateStronglyTypedResourcesTask Files="@(EmbeddedResource)" />
+  </Target>
+
+  <UsingTask TaskName="_UpdateStronglyTypedResourcesTask"
+             TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        for (var i = 0; i < Files.Length; i++)
+        {
+            if (!Files[i].MetadataNames.Cast<string>().Contains("StronglyTypedFileName"))
+            {
+                continue;
+            }
+
+            var path = Files[i].GetMetadata("StronglyTypedFileName");
+            var contents = System.IO.File.ReadAllText(path);
+            var transformed = contents;
+
+            // update the using
+            transformed = System.Text.RegularExpressions.Regex.Replace(transformed, @"using System;", "using System.Reflection;");
+
+            // remove any previous modifications
+            do
+            {
+                var after = System.Text.RegularExpressions.Regex.Replace(transformed, @"\.GetTypeInfo\(\)\.Assembly", ".Assembly");
+                if (after == transformed)
+                {
+                    break;
+                }
+
+                transformed = after;
+            } while (true);
+
+            // add in the 'GetTypeInfo()'
+            transformed = System.Text.RegularExpressions.Regex.Replace(transformed, @"typeof\((.*?)\)\.Assembly", "typeof($1).GetTypeInfo().Assembly");
+
+            // only write if changed
+            if (contents != transformed)
+            {
+                Log.LogMessageFromText($"Update Resource -> {path}", MessageImportance.Normal);
+                System.IO.File.WriteAllText(path, transformed);
+            }
+        }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <!--
     Banned Symbols
   -->
   <PropertyGroup>
