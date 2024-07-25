@@ -28,6 +28,10 @@ jobs:
           [xml]$xml = Get-Content 'Altemiq.DotNet.CodingStandard.nuspec'
           $nodes = $xml.SelectNodes('/package/metadata/dependencies/dependency')
 
+          # set the git user
+          git config user.name 'github-actions'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
           $nodes | ForEach-Object {
               $dependencyName = $_.Attributes['id'].Value
               $attribute = $_.Attributes['version']
