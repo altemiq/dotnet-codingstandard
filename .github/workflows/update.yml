@@ -31,6 +31,7 @@ jobs:
           # set the git user
           git config user.name 'github-actions'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          $updated = $false
 
           $nodes | ForEach-Object {
               $dependencyName = $_.Attributes['id'].Value
@@ -51,7 +52,12 @@ jobs:
                   # commit this with the correct stuff
                   git add 'Altemiq.DotNet.CodingStandard.nuspec'
                   git commit -m "⬆️ update ``$dependencyName`` to ``$($first.Version)``"
+                  $updated = $true
               }
           }
 
-          git push
+          if ($true -eq $updated) {
+            git push
+            gh workflow run ci.yml
+          }
+
