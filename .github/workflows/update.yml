@@ -35,12 +35,16 @@ jobs:
           $nodes | ForEach-Object {
               $dependencyName = $_.Attributes['id'].Value
               $attribute = $_.Attributes['version']
+
+              Write-Host "Checking ``$dependencyName``"
           
               $packages = Find-Package -Name $dependencyName -Source nuget.org -AllVersions
           
               $first = $packages[0]
+              Write-Host "Found ``$($first.Name)`` - ``$($first.Version)``"
           
               if ($attribute.Value -ne $first.Version) {
+                  Write-Host "Updating ``$dependencyName`` from ``$($attribute.Value)`` to ``$($first.Version)``"
                   $attribute.Value = $first.Version
                   $xml.Save('Altemiq.DotNet.CodingStandard.nuspec')
           
