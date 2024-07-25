@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+<package>
   <metadata>
     <id>Altemiq.DotNet.CodingStandard</id>
     <version>$version$</version>
@@ -9,15 +9,13 @@
     <icon>icon.png</icon>
     <projectUrl>https://github.com/altemiq/dotnet-codingstandard</projectUrl>
     <description>A package to configure .NET coding style and static analysis</description>
-    
     <repository type="git" url="$RepositoryUrl$" commit="$RepositoryCommit$" branch="$RepositoryBranch$" />
     <dependencies>
-      <dependency id="Meziantou.Analyzer" version="2.0.161" />      
+      <dependency id="Meziantou.Analyzer" version="2.0.161" />
       <dependency id="Microsoft.CodeAnalysis.BannedApiAnalyzers" version="3.3.4" />
       <dependency id="Roslynator.Analyzers" version="4.12.4" />
       <dependency id="SonarAnalyzer.CSharp" version="9.29.0.95321" />
       <dependency id="StyleCop.Analyzers.Unstable" version="1.2.0.556" />
-
       <dependency id="DotNet.ReproducibleBuilds" version="1.2.4" />
       <dependency id="DotNet.ReproducibleBuilds.Isolated" version="1.2.4" />
     </dependencies>

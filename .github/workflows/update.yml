@@ -1,0 +1,49 @@
+name: update
+on:
+  schedule:
+    - cron: '0 */1 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ci-site-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  NuGetDirectory: ${{ github.workspace}}/nuget
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  update_packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: internal/update-package@v1
+        run: |
+          # open the nuspec
+          [xml]$xml = Get-Content 'Altemiq.DotNet.CodingStandard.nuspec'
+          $nodes = $xml.SelectNodes('/package/metadata/dependencies/dependency')
+
+          $nodes | ForEach-Object {
+              $dependencyName = $_.Attributes['id'].Value
+              $attribute = $_.Attributes['version']
+          
+              $packages = Find-Package -Name $dependencyName -Source nuget.org -AllVersions
+          
+              $first = $packages[0]
+          
+              if ($attribute.Value -ne $first.Version) {
+                  $attribute.Value = $first.Version
+                  $xml.Save('Altemiq.DotNet.CodingStandard.nuspec')
+          
+                  # commit this with the correct stuff
+                  git add 'Altemiq.DotNet.CodingStandard.nuspec'
+                  git commit -m "⬆️ update ``$dependencyName`` to ``$($first.Version)``"
+              }
+          }
+
+          git push
