@@ -15,9 +15,6 @@
     <!-- By default, set the assembly name to have the company at the start -->
     <AssemblyName Condition=" '$(AssemblyName)' == '' ">$(Company).$(MSBuildProjectName)</AssemblyName>
 
-    <!-- Generate documentation -->
-    <GenerateDocumentationFile Condition=" '$(OutputType)' == 'Library' ">true</GenerateDocumentationFile>
-
     <!-- Use static graph evaluation for restore -->
     <RestoreUseStaticGraphEvaluation Condition=" '$(RestoreUseStaticGraphEvaluation)' == '' ">true</RestoreUseStaticGraphEvaluation>
 
@@ -39,6 +36,8 @@
 
     <!-- Turn of CLS compliant check-->
     <NoWarn>$(NoWarn);CA1014</NoWarn>
+
+    <!-- allow unsafe blocks be default -->
     <AllowUnsafeBlocks Condition=" '$(AllowUnsafeBlocks)' == '' ">true</AllowUnsafeBlocks>
 
     <!-- Use latest lang version for latest features -->

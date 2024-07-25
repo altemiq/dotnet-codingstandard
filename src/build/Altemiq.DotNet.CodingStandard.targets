@@ -1,5 +1,13 @@
 <Project>
 
+  <!-- 
+    XML Documentation
+  -->
+  <PropertyGroup>
+    <!-- Generate documentation for libraries -->
+    <GenerateDocumentationFile Condition=" '$(OutputType)' == 'Library' ">true</GenerateDocumentationFile>
+  </PropertyGroup>
+
   <!--
     Strongly-Typed resources
   -->
