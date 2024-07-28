@@ -23,6 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: internal/update-package@v1
+        id: update-package
         run: |
           # open the nuspec
           [xml]$xml = Get-Content 'Altemiq.DotNet.CodingStandard.nuspec'
@@ -57,7 +58,17 @@ jobs:
           }
 
           if ($true -eq $updated) {
-            git push
-            gh workflow run ci.yml
+              git push
+              echo "updated=true" >> $env:GITHUB_OUTPUT
           }
+          else {
+              echo "updated=false" >> $env:GITHUB_OUTPUT
+          }
+      - name: internal/trigger-workflow@v1
+        if: steps.update-package.outputs.updated == true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run ci.yml
+        
 
