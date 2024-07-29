@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="Microsoft.Build.Utilities.v4.0" Pack="false" />
+    <Reference Include="Microsoft.Build.Tasks.v4.0" Pack="false" />
+    <Reference Include="Microsoft.Build.Framework" Pack="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net461' ">
+    <PackageReference Include="Microsoft.Build.Tasks.Core" ExcludeAssets="runtime" Version="16.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NuGet.ProjectModel" Version="5.11.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Include="..\..\src\configuration\*.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="*.proj" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

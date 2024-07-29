@@ -1,0 +1,94 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tasks", "tasks", "{EFD1E013-4764-4D15-9A30-9541934FF489}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Altemiq.DotNet.CodingStandard.Tasks", "tasks\Altemiq.DotNet.CodingStandard.Tasks\Altemiq.DotNet.CodingStandard.Tasks.csproj", "{0D4328DF-30FF-4C6C-B180-747CD4D226AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3484DF49-7698-4E1C-902F-ECED1F77E85F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Altemiq.DotNet.CodingStandard.Tests", "tests\Altemiq.DotNet.CodingStandard.Tests\Altemiq.DotNet.CodingStandard.Tests.csproj", "{8181A4A9-BF87-45FB-B2B4-F72956693CFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{166E68CD-2FCE-4098-81AA-EF5AB84AE1CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{AE142DF0-A876-43BC-8679-50EA3B9860D6}"
+	ProjectSection(SolutionItems) = preProject
+		src\build\Altemiq.DotNet.CodingStandard.props = src\build\Altemiq.DotNet.CodingStandard.props
+		src\build\Altemiq.DotNet.CodingStandard.targets = src\build\Altemiq.DotNet.CodingStandard.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "buildMultiTargeting", "buildMultiTargeting", "{21F85688-CF13-4D87-ABE7-4D19FB27F13F}"
+	ProjectSection(SolutionItems) = preProject
+		src\buildMultiTargeting\Altemiq.DotNet.CodingStandard.props = src\buildMultiTargeting\Altemiq.DotNet.CodingStandard.props
+		src\buildMultiTargeting\Altemiq.DotNet.CodingStandard.targets = src\buildMultiTargeting\Altemiq.DotNet.CodingStandard.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "buildTransitive", "buildTransitive", "{B915D2C6-72DE-41ED-B0E7-DC3C7DDF1FB6}"
+	ProjectSection(SolutionItems) = preProject
+		src\buildTransitive\Altemiq.DotNet.CodingStandard.props = src\buildTransitive\Altemiq.DotNet.CodingStandard.props
+		src\buildTransitive\Altemiq.DotNet.CodingStandard.targets = src\buildTransitive\Altemiq.DotNet.CodingStandard.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{FE572684-8695-47D3-8971-9A386639F231}"
+	ProjectSection(SolutionItems) = preProject
+		src\configuration\Analyzer.Devlooped.SponsorLink.editorconfig = src\configuration\Analyzer.Devlooped.SponsorLink.editorconfig
+		src\configuration\Analyzer.Meziantou.Analyzer.editorconfig = src\configuration\Analyzer.Meziantou.Analyzer.editorconfig
+		src\configuration\Analyzer.Microsoft.CodeAnalysis.BannedApiAnalyzers.editorconfig = src\configuration\Analyzer.Microsoft.CodeAnalysis.BannedApiAnalyzers.editorconfig
+		src\configuration\Analyzer.Microsoft.CodeAnalysis.NetAnalyzers.editorconfig = src\configuration\Analyzer.Microsoft.CodeAnalysis.NetAnalyzers.editorconfig
+		src\configuration\Analyzer.Roslynator.Analyzers.editorconfig = src\configuration\Analyzer.Roslynator.Analyzers.editorconfig
+		src\configuration\BannedSymbols.txt = src\configuration\BannedSymbols.txt
+		src\configuration\CodingStyle.editorconfig = src\configuration\CodingStyle.editorconfig
+		src\configuration\NamingConvention.editorconfig = src\configuration\NamingConvention.editorconfig
+		src\configuration\SonarAnalyzer.CSharp.editorconfig = src\configuration\SonarAnalyzer.CSharp.editorconfig
+		src\configuration\stylecop.json = src\configuration\stylecop.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC29FE1-49C2-4F8C-AE21-0E4A0FE0AEDB}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Altemiq.DotNet.CodingStandard.nuspec = Altemiq.DotNet.CodingStandard.nuspec
+		global.json = global.json
+		icon.png = icon.png
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{D8D40120-7AF1-4E53-AECC-AD84C01C2A90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{69FA22D1-86C6-434E-9BE4-8782759356F9}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		.github\workflows\update.yml = .github\workflows\update.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {66EF7A83-3B97-414B-A1B6-463B24AB2B11}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D4328DF-30FF-4C6C-B180-747CD4D226AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D4328DF-30FF-4C6C-B180-747CD4D226AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D4328DF-30FF-4C6C-B180-747CD4D226AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D4328DF-30FF-4C6C-B180-747CD4D226AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8181A4A9-BF87-45FB-B2B4-F72956693CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8181A4A9-BF87-45FB-B2B4-F72956693CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8181A4A9-BF87-45FB-B2B4-F72956693CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8181A4A9-BF87-45FB-B2B4-F72956693CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0D4328DF-30FF-4C6C-B180-747CD4D226AA} = {EFD1E013-4764-4D15-9A30-9541934FF489}
+		{21F85688-CF13-4D87-ABE7-4D19FB27F13F} = {166E68CD-2FCE-4098-81AA-EF5AB84AE1CF}
+		{69FA22D1-86C6-434E-9BE4-8782759356F9} = {D8D40120-7AF1-4E53-AECC-AD84C01C2A90}
+		{8181A4A9-BF87-45FB-B2B4-F72956693CFE} = {3484DF49-7698-4E1C-902F-ECED1F77E85F}
+		{AE142DF0-A876-43BC-8679-50EA3B9860D6} = {166E68CD-2FCE-4098-81AA-EF5AB84AE1CF}
+		{B915D2C6-72DE-41ED-B0E7-DC3C7DDF1FB6} = {166E68CD-2FCE-4098-81AA-EF5AB84AE1CF}
+		{FE572684-8695-47D3-8971-9A386639F231} = {166E68CD-2FCE-4098-81AA-EF5AB84AE1CF}
+	EndGlobalSection
+EndGlobal

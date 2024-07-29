@@ -1,5 +1,15 @@
 <Project>
 
+  <PropertyGroup Condition=" '$(CodingStandardTaskAssembly)' == '' ">
+    <_RuntimeFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">netstandard2.0</_RuntimeFolder >
+    <_RuntimeFolder  Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net461</_RuntimeFolder >
+    <CodingStandardTaskBaseDirectory Condition=" '$(CodingStandardTaskBaseDirectory)' == '' ">$(MSBuildThisFileDirectory)..\tasks</CodingStandardTaskBaseDirectory>
+    <CodingStandardTaskDirectory>$(CodingStandardTaskBaseDirectory)\$(_RuntimeFolder)\</CodingStandardTaskDirectory>
+    <CodingStandardTaskAssembly>$(CodingStandardTaskDirectory)$(MSBuildThisFileName).Tasks.dll</CodingStandardTaskAssembly>
+  </PropertyGroup>
+
+  <UsingTask TaskName="Altemiq.DotNet.CodingStandard.Tasks.UpdateRestoreGraphTask" AssemblyFile="$(CodingStandardTaskAssembly)" Condition="Exists('$(CodingStandardTaskAssembly)')" />
+
   <!-- 
     XML Documentation
   -->
@@ -163,6 +173,36 @@
       <_PackageProjectUrl Condition=" '$(_PackageProjectUrl)' != '' and $(_PackageProjectUrl.EndsWith('.git'))">$(_PackageProjectUrl.Substring(0,$(_PackageProjectUrl.LastIndexOf('.'))))</_PackageProjectUrl>
       <PackageProjectUrl Condition=" '$(PackageProjectUrl)' == '' and '$(_PackageProjectUrl)' != ''">$(_PackageProjectUrl)</PackageProjectUrl>
     </PropertyGroup>
+  </Target>
+  
+  <PropertyGroup>
+    <GenerateNuspecDependsOn>_UpdateRestoreGraph;$(GenerateNuspecDependsOn)</GenerateNuspecDependsOn>
+  </PropertyGroup>
+
+  <!--
+    NuGet restore graph update
+  -->
+  <Target Name="_UpdateRestoreGraph"
+          DependsOnTargets="_GetAbsoluteOutputPathsForPack"
+          Condition=" '$(ProjectAssetsFile)' != '' ">
+    <ConvertToAbsolutePath Paths="$(ProjectAssetsFile)">
+      <Output TaskParameter="AbsolutePaths" PropertyName="ProjectAssetsFileAbsolutePath" />
+    </ConvertToAbsolutePath>
+
+    <UpdateRestoreGraphTask ProjectAssetsFileAbsolutePath="$(ProjectAssetsFileAbsolutePath)" />
+  </Target>
+
+  <!--
+    Get the NuGet package ID
+  -->
+  <Target Name="_GetPackageId" 
+        Returns="@(_ProjectPathWithPackageId)">
+    <ItemGroup>
+      <_ProjectPathWithPackageId Include="$(MSBuildProjectFullPath)">
+        <PackageId Condition=" '$(PackageId)' != '' ">$(PackageId)</PackageId>
+        <PackageId Condition=" '$(PackageId)' == '' ">$(AssemblyName)</PackageId>
+      </_ProjectPathWithPackageId>
+    </ItemGroup>
   </Target>
   
 </Project>

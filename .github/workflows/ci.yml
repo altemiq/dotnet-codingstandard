@@ -28,19 +28,25 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-dotnet@v4
+
       - name: internal/compute-version@v1
         id: compute-version
         run: |
-          $NewVersion = '1.0.${{ github.run_number }}'
+          $version = '1.0.${{ github.run_number }}'
           if ($env:GITHUB_REF -ne 'refs/heads/main')
           {
-              $NewVersion = "$NewVersion-beta"
+              $version = "$version-beta"
           }
           
-          Write-Host "New version: $NewVersion"
-          "package_version=$NewVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "New version: $version"
+          "package_version=$version" >> $env:GITHUB_OUTPUT
+
+      - run: dotnet build tasks/Altemiq.DotNet.CodingStandard.Tasks --configuration Release -property:Version=${{ steps.compute-version.outputs.package_version }}
+
       - run: nuget pack Altemiq.DotNet.CodingStandard.nuspec -ForceEnglishOutput -Version ${{ steps.compute-version.outputs.package_version }} -Properties "RepositoryCommit=${{ github.sha }};RepositoryBranch=${{ github.ref_name }};RepositoryUrl=${{ github.repositoryUrl }}"
+
       - uses: actions/upload-artifact@v4
         with:
           name: nuget
@@ -63,16 +69,20 @@ jobs:
     needs: [create_nuget, test]
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v4
         with:
           name: nuget
           path: ${{ env.NuGetDirectory }}
+
       - uses: actions/setup-dotnet@v4
+
       - id: push
         working-directory: ${{ env.NuGetDirectory }}
         run: |
           Write-Host "Current ref: $env:GITHUB_REF"
           dotnet nuget push *.nupkg --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
       - uses: GeekyEggo/delete-artifact@v4
         if: ${{ steps.push.conclusion == 'success' }}
         with:
