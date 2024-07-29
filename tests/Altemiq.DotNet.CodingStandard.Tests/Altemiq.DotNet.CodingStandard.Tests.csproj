@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\tasks\Altemiq.DotNet.CodingStandard.Tasks\Altemiq.DotNet.CodingStandard.Tasks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

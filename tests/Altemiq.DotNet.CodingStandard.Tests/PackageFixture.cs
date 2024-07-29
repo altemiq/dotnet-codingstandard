@@ -4,6 +4,12 @@ using Meziantou.Framework;
 
 public sealed class PackageFixture : IAsyncLifetime
 {
+#if DEBUG
+    private const string Configuration = "Debug";
+#else
+    private const string Configuration = "Release";
+#endif
+
     private readonly TemporaryDirectory _packageDirectory = TemporaryDirectory.Create();
 
     public FullPath PackageDirectory => _packageDirectory.FullPath;
@@ -16,7 +22,7 @@ public sealed class PackageFixture : IAsyncLifetime
         FullPath nuspecPath = PathHelpers.GetRootDirectory() / "Altemiq.DotNet.CodingStandard.nuspec";
 
         System.Diagnostics.ProcessStartInfo psi = new(nugetPath);
-        psi.ArgumentList.AddRange(["pack", nuspecPath, "-ForceEnglishOutput", "-Version", "999.9.9", "-OutputDirectory", _packageDirectory.FullPath]);
+        psi.ArgumentList.AddRange(["pack", nuspecPath, "-ForceEnglishOutput", "-Version", "999.9.9", "-OutputDirectory", _packageDirectory.FullPath, "-Properties", $"Configuration={Configuration}"]);
         _ = await psi.RunAsTaskAsync();
     }
 

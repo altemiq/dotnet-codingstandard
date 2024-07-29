@@ -45,7 +45,7 @@ jobs:
 
       - run: dotnet build tasks/Altemiq.DotNet.CodingStandard.Tasks --configuration Release -property:Version=${{ steps.compute-version.outputs.package_version }}
 
-      - run: nuget pack Altemiq.DotNet.CodingStandard.nuspec -ForceEnglishOutput -Version ${{ steps.compute-version.outputs.package_version }} -Properties 'RepositoryCommit=${{ github.sha }};RepositoryBranch=${{ github.ref_name }};RepositoryUrl=${{ github.repositoryUrl }};NoWarn=NU5100'
+      - run: nuget pack Altemiq.DotNet.CodingStandard.nuspec -ForceEnglishOutput -Version ${{ steps.compute-version.outputs.package_version }} -Properties 'RepositoryCommit=${{ github.sha }};RepositoryBranch=${{ github.ref_name }};RepositoryUrl=${{ github.repositoryUrl }};NoWarn=NU5100;Configuration=Release'
 
       - uses: actions/upload-artifact@v4
         with:
