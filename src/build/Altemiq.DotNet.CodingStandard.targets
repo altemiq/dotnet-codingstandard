@@ -130,9 +130,18 @@
   <ItemGroup>
     <!-- Add BannedSymbols.txt -->
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\..\configuration\BannedSymbols.txt" Condition=" '$(IncludeDefaultBannedSymbols)' == 'true' " Visible="false" />
+  </ItemGroup>
+  
+  <!--
+    StyleCop
+  -->
+  <PropertyGroup>
+    <IncludeDefaultStyleCop Condition=" '$(IncludeDefaultStyleCop)' == '' ">true</IncludeDefaultStyleCop>
+  </PropertyGroup>
 
+  <ItemGroup>
     <!-- Add stylecop.json -->
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)\..\configuration\stylecop.json" Visible="false" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)\..\configuration\stylecop.json" Condition=" '$(IncludeDefaultStyleCop)' == 'true' " Visible="false" />
   </ItemGroup>
 
   <PropertyGroup>
