@@ -17,7 +17,7 @@
       <dependency id="SonarAnalyzer.CSharp" version="9.32.0.97167" />
       <dependency id="StyleCop.Analyzers.Unstable" version="1.2.0.556" />
       <dependency id="DotNet.ReproducibleBuilds" version="1.2.25" />
-      <dependency id="DotNet.ReproducibleBuilds.Isolated" version="1.2.4" />
+      <dependency id="DotNet.ReproducibleBuilds.Isolated" version="1.2.25" />
     </dependencies>
   </metadata>
   <files>
