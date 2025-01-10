@@ -11,7 +11,7 @@
     <description>A package to configure .NET coding style and static analysis</description>
     <repository type="git" url="$RepositoryUrl$" commit="$RepositoryCommit$" branch="$RepositoryBranch$" />
     <dependencies>
-      <dependency id="Meziantou.Analyzer" version="2.0.185" />
+      <dependency id="Meziantou.Analyzer" version="2.0.186" />
       <dependency id="Microsoft.CodeAnalysis.BannedApiAnalyzers" version="3.3.4" />
       <dependency id="Roslynator.Analyzers" version="4.12.10" />
       <dependency id="SonarAnalyzer.CSharp" version="10.4.0.108396" />
