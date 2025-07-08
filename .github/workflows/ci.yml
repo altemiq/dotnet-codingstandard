@@ -82,6 +82,7 @@ jobs:
         run: |
           Write-Host "Current ref: $env:GITHUB_REF"
           dotnet nuget push *.nupkg --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+          dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }} --skip-duplicate
 
       - uses: GeekyEggo/delete-artifact@v4
         if: ${{ steps.push.conclusion == 'success' }}
