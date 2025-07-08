@@ -7,6 +7,7 @@
     <developmentDependency>true</developmentDependency>
     <readme>README.md</readme>
     <icon>icon.png</icon>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/altemiq/dotnet-codingstandard</projectUrl>
     <description>A package to configure .NET coding style and static analysis</description>
     <repository type="git" url="$RepositoryUrl$" commit="$RepositoryCommit$" branch="$RepositoryBranch$" />
