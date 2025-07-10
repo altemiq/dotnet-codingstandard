@@ -20,6 +20,9 @@ defaults:
 jobs:
   update_packages:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: internal/update-package@v1
