@@ -17,7 +17,7 @@
       <dependency id="Roslynator.Analyzers" version="4.14.0" />
       <dependency id="SonarAnalyzer.CSharp" version="10.15.0.120848" />
       <dependency id="StyleCop.Analyzers.Unstable" version="1.2.0.556" />
-      <dependency id="DotNet.ReproducibleBuilds" version="1.2.25" />
+      <dependency id="DotNet.ReproducibleBuilds" version="1.2.39" />
       <dependency id="DotNet.ReproducibleBuilds.Isolated" version="1.2.25" />
     </dependencies>
   </metadata>
