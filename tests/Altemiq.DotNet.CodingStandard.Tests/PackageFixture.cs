@@ -14,7 +14,7 @@ public sealed class PackageFixture : IAsyncLifetime
 
     public FullPath PackageDirectory => _packageDirectory.FullPath;
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         // Build NuGet package
         FullPath nugetPath = FullPath.GetTempPath() / $"nuget-{Guid.NewGuid()}.exe";
@@ -26,7 +26,7 @@ public sealed class PackageFixture : IAsyncLifetime
         _ = await psi.RunAsTaskAsync();
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         await _packageDirectory.DisposeAsync();
     }

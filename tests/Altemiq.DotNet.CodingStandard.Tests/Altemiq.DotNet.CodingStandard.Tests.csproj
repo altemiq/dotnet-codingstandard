@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net$(NETCoreAppMaximumVersion)</TargetFramework>
+    <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -10,11 +11,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Meziantou.Framework" Version="3.0.39" />
-    <PackageReference Include="Meziantou.Framework.TemporaryDirectory" Version="1.0.9" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-    <PackageReference Include="xunit" Version="2.9.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+    <PackageReference Include="Meziantou.Framework" Version="5.0.18" />
+    <PackageReference Include="Meziantou.Framework.TemporaryDirectory" Version="2.0.0" />
+<!--    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />-->
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="16.11.6" />
+    <PackageReference Include="NuGet.ProjectModel" Version="7.3.1" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.3" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="4.7.1" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

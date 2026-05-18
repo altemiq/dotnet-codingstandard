@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml.Linq;
-using Xunit.Abstractions;
 
 public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHelper) : IClassFixture<PackageFixture>
 {
@@ -68,7 +67,7 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
             XElement propertiesElement = new("PropertyGroup");
             if (properties is not null)
             {
-                foreach ((string name, string value) in properties)
+                foreach (var (name, value) in properties)
                 {
                     propertiesElement.Add(new XElement(name), value);
                 }

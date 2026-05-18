@@ -46,14 +46,16 @@ public class UpdateRestoreGraphTask : Microsoft.Build.Utilities.Task
 
         var cache = new Dictionary<PackageIdentity, string>();
         var updated = false;
-        foreach (var lockFileLibrary in assetsFile.Libraries)
+        for (int i = 0; i < assetsFile.Libraries.Count; i++)
         {
+            var lockFileLibrary = assetsFile.Libraries[i];
+        
             if (lockFileLibrary.MSBuildProject is null)
             {
                 continue;
             }
 
-            var projectPathToLibrary = Path.GetFullPath(Path.Combine(projectDirectory, NuGet.Common.PathUtility.GetPathWithDirectorySeparator(lockFileLibrary.MSBuildProject)));
+            var projectPathToLibrary = Path.GetFullPath(Path.Combine(projectDirectory!, NuGet.Common.PathUtility.GetPathWithDirectorySeparator(lockFileLibrary.MSBuildProject)));
 
             var task = new Microsoft.Build.Tasks.MSBuild
             {
@@ -71,7 +73,7 @@ public class UpdateRestoreGraphTask : Microsoft.Build.Utilities.Task
                 if (packageId is not null && lockFileLibrary.Name != packageId)
                 {
                     cache.Add(new PackageIdentity(lockFileLibrary.Name, lockFileLibrary.Version), packageId);
-                    lockFileLibrary.Name = packageId;
+                    assetsFile.Libraries[i] = lockFileLibrary with { Name = packageId };
                     updated = true;
                 }
             }
@@ -87,7 +89,7 @@ public class UpdateRestoreGraphTask : Microsoft.Build.Utilities.Task
 
             var libraryIdentityToTargetLibrary = target
                 .Libraries
-                .ToLookup(library => new PackageIdentity(library.Name, library.Version));
+                .ToLookup(library => new PackageIdentity(library.Name!, library.Version));
 
             foreach (var grouping in libraryIdentityToTargetLibrary)
             {
