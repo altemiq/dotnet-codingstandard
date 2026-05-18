@@ -24,8 +24,8 @@ jobs:
       actions: write
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - name: internal/update-package@v1
+      - uses: actions/checkout@v6
+      - name: Run internal/update-package@v1
         id: update-package
         env:
           GH_TOKEN: ${{ github.token }}

@@ -27,11 +27,11 @@ jobs:
   create_nuget:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
 
-      - name: internal/compute-version@v1
+      - name: Run internal/compute-version@v1
         id: compute-version
         run: |
           $version = '1.0.${{ github.run_number }}'
@@ -47,7 +47,7 @@ jobs:
 
       - run: nuget pack Altemiq.DotNet.CodingStandard.nuspec -ForceEnglishOutput -Version ${{ steps.compute-version.outputs.package_version }} -Properties 'RepositoryCommit=${{ github.sha }};RepositoryBranch=${{ github.ref_name }};RepositoryUrl=${{ github.repositoryUrl }};NoWarn=NU5100;Configuration=Release'
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: nuget
           if-no-files-found: error
@@ -57,9 +57,9 @@ jobs:
   test:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-      - run: dotnet test tests/Altemiq.DotNet.CodingStandard.Tests/Altemiq.DotNet.CodingStandard.Tests.csproj
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+      - run: dotnet test --project tests/Altemiq.DotNet.CodingStandard.Tests/Altemiq.DotNet.CodingStandard.Tests.csproj
 
   deploy:
     runs-on: ubuntu-latest
@@ -68,14 +68,14 @@ jobs:
       actions: write
     needs: [create_nuget, test]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/download-artifact@v4
         with:
           name: nuget
           path: ${{ env.NuGetDirectory }}
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
 
       - id: push
         working-directory: ${{ env.NuGetDirectory }}
