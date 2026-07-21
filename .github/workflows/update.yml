@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ci-site-${{ github.ref }}
-  cancel-in-progress: false
+  group: update-site-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -24,8 +24,9 @@ jobs:
       actions: write
       contents: write
     steps:
-      - uses: actions/checkout@v6
-      - name: Run internal/update-package@v1
+      - uses: actions/checkout@v7
+
+      - name: Run local/update-package@v1
         id: update-package
         env:
           GH_TOKEN: ${{ github.token }}

@@ -27,11 +27,11 @@ jobs:
   create_nuget:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
 
-      - name: Run internal/compute-version@v1
+      - name: Run local/compute-version@v1
         id: compute-version
         run: |
           $version = '1.0.${{ github.run_number }}'
@@ -57,8 +57,8 @@ jobs:
   test:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
       - run: dotnet test --project tests/Altemiq.DotNet.CodingStandard.Tests/Altemiq.DotNet.CodingStandard.Tests.csproj
 
   deploy:
@@ -69,9 +69,9 @@ jobs:
       id-token: write
     needs: [create_nuget, test]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: nuget
           path: ${{ env.NuGetDirectory }}
@@ -81,14 +81,15 @@ jobs:
         with:
           user: ${{ github.actor }}
 
-      - id: push
+      - name: Run local/dotnet-push@v1
+        id: push
         working-directory: ${{ env.NuGetDirectory }}
         run: |
           Write-Host "Current ref: $env:GITHUB_REF"
           dotnet nuget push *.nupkg --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
           dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
 
-      - uses: GeekyEggo/delete-artifact@v4
+      - uses: GeekyEggo/delete-artifact@v6
         if: ${{ steps.push.conclusion == 'success' }}
         with:
           name: nuget
