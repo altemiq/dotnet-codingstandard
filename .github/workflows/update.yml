@@ -44,11 +44,16 @@ jobs:
               $dependencyName = $_.Attributes['id'].Value
               $attribute = $_.Attributes['version']
 
-              Write-Host "Checking ``$dependencyName``"
-          
-              $packages = Find-Package -Name $dependencyName -Source nuget.org -AllVersions
-          
-              $first = $packages[0]
+               Write-Host "Checking ``$dependencyName``"
+
+               # allow prerelease versions if the current version is a prerelease
+               if ($attribute.Value -match '-[A-Za-z]') {
+                   $packages = Find-Package -Name $dependencyName -Source nuget.org -AllVersions -AllowPrereleaseVersions
+               } else {
+                   $packages = Find-Package -Name $dependencyName -Source nuget.org -AllVersions
+               }
+
+               $first = $packages[0]
               Write-Host "Found ``$($first.Name)`` - ``$($first.Version)``"
           
               if ($attribute.Value -ne $first.Version) {
