@@ -12,8 +12,9 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
     public async Task NoXmlDocumentationReported()
     {
         ProjectBuilder project = new(fixture, testOutputHelper);
-        _ = project.AddCsprojFile();
-        _ = project.AddFile("sample.cs", """_ = System.DateTime.Now;""");
+        _ = project
+            .AddCsprojFile()
+            .AddFile("sample.cs", """_ = System.DateTime.UtcNow;""");
         BuildResult data = await project.BuildAndGetOutput();
         Assert.True(data.HasWarning("SA0001"));
     }
@@ -106,34 +107,32 @@ public class PackageTests(PackageFixture fixture, ITestOutputHelper testOutputHe
 
         public async Task<BuildResult> BuildAndGetOutput(params string[]? buildArguments)
         {
-            ProcessStartInfo psi = new("dotnet")
-            {
-                WorkingDirectory = _directory.FullPath,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                ArgumentList = { "build" },
-            };
-
-            if (buildArguments is not null)
-            {
-                foreach (string arg in buildArguments)
+            ProcessWrapper wrapper = ProcessWrapper.Create("dotnet")
+                .WithWorkingDirectory(_directory.FullPath)
+                .WithArguments(CreateEnumerable("build").Concat(CreateEnumerableSafe(buildArguments)))
+                .WithEnvironmentVariables(new Dictionary<string, string?>
                 {
-                    psi.ArgumentList.Add(arg);
-                }
-            }
-
-            // Remove parent environment variables
-            _ = psi.Environment.Remove("CI");
-            _ = psi.Environment.Remove("GITHUB_ACTIONS");
-
-            ProcessResult result = await psi.RunAsTaskAsync();
+                    ["CI"] = null,
+                    ["GITHUB_ACTIONS"] = null,
+                });
+            BufferedProcessResult result = await wrapper.ExecuteBufferedAsync();
+                
             _testOutputHelper.WriteLine("Process exit code: " + result.ExitCode);
             _testOutputHelper.WriteLine(result.Output.ToString());
 
             SarifFile? sarif = JsonSerializer.Deserialize<SarifFile>(File.ReadAllBytes(_directory.FullPath / SarifFileName));
             _testOutputHelper.WriteLine("Sarif result:\n" + string.Join("\n", sarif!.AllResults().Select(r => r.ToString())));
             return new BuildResult(result.ExitCode, result.Output, sarif);
+
+            static IEnumerable<string> CreateEnumerable(params IEnumerable<string> values)
+            {
+                return values;
+            }
+
+            static IEnumerable<string> CreateEnumerableSafe(IEnumerable<string>? values)
+            {
+                return values ?? [];
+            }
         }
 
         public ValueTask DisposeAsync()

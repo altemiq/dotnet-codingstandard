@@ -21,9 +21,9 @@ public sealed class PackageFixture : IAsyncLifetime
         await DownloadFileAsync("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe", nugetPath);
         FullPath nuspecPath = PathHelpers.GetRootDirectory() / "Altemiq.DotNet.CodingStandard.nuspec";
 
-        System.Diagnostics.ProcessStartInfo psi = new(nugetPath);
-        psi.ArgumentList.AddRange(["pack", nuspecPath, "-ForceEnglishOutput", "-Version", "999.9.9", "-OutputDirectory", _packageDirectory.FullPath, "-Properties", $"Configuration={Configuration}"]);
-        _ = await psi.RunAsTaskAsync();
+        _ = await ProcessWrapper.Create(nugetPath)
+            .WithArguments("pack", nuspecPath, "-ForceEnglishOutput", "-Version", "999.9.9", "-OutputDirectory", _packageDirectory.FullPath, "-Properties", $"Configuration={Configuration}")
+            .ExecuteBufferedAsync();
     }
 
     public async ValueTask DisposeAsync()
