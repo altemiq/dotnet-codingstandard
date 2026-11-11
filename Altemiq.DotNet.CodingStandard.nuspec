@@ -15,7 +15,7 @@
       <dependency id="Meziantou.Analyzer" version="3.0.325" />
       <dependency id="Microsoft.CodeAnalysis.BannedApiAnalyzers" version="5.6.0" />
       <dependency id="Roslynator.Analyzers" version="5.0.1" />
-      <dependency id="SonarAnalyzer.CSharp" version="10.35.0.4138" />
+      <dependency id="SonarAnalyzer.CSharp" version="10.36.0.15337" />
       <dependency id="StyleCop.Analyzers" version="1.3.180" />
       <dependency id="DotNet.ReproducibleBuilds" version="2.0.5" />
       <dependency id="DotNet.ReproducibleBuilds.Isolated" version="2.0.5" />
